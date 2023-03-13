@@ -1,20 +1,30 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {LoginScreen} from '../screens';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {LoginScreen, ListUserScreen} from '../screens';
 
-const Stack = createNativeStackNavigator();
+export type DrawerParamList = {
+  Login: undefined;
+  ListUserScreen: undefined;
+};
+
+const Drawer = createDrawerNavigator<DrawerParamList>();
 
 export const AppNavigators = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
+      <Drawer.Navigator initialRouteName="Login">
+        <Drawer.Screen
           name="Login"
           component={LoginScreen}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+            swipeEnabled: false,
+            drawerItemStyle: {height: 0},
+          }}
         />
-      </Stack.Navigator>
+        <Drawer.Screen name="ListUserScreen" component={ListUserScreen} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 };

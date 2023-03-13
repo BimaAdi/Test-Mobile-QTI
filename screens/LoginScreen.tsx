@@ -1,8 +1,12 @@
 import {Card, Layout, Text, Input, Button} from '@ui-kitten/components';
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import type {DrawerParamList} from '../navigators';
 
-export const LoginScreen = () => {
+type Props = NativeStackScreenProps<DrawerParamList, 'Login'>;
+
+export const LoginScreen = ({navigation}: Props) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   return (
@@ -30,8 +34,7 @@ export const LoginScreen = () => {
         <Button
           style={styles.loginButton}
           onPress={() => {
-            console.log(email);
-            console.log(password);
+            navigation.navigate('ListUserScreen');
           }}>
           Login
         </Button>
