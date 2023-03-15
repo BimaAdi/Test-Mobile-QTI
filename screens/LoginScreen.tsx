@@ -1,12 +1,13 @@
-import {Card, Layout, Text, Input, Button} from '@ui-kitten/components';
-import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import type {DrawerParamList} from '../navigators';
+import { Card, Layout, Text, Input, Button } from '@ui-kitten/components';
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { DrawerParamList } from '../navigators';
+import { loginApi } from '../services/LoginApi';
 
 type Props = NativeStackScreenProps<DrawerParamList, 'Login'>;
 
-export const LoginScreen = ({navigation}: Props) => {
+export const LoginScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   return (
@@ -34,7 +35,9 @@ export const LoginScreen = ({navigation}: Props) => {
         <Button
           style={styles.loginButton}
           onPress={() => {
-            navigation.navigate('ListUserScreen');
+            // navigation.navigate('ListUserScreen');
+            let data = loginApi({ email: "admin@example.com", password: "12qwaszx" })
+            console.log(data)
           }}>
           Login
         </Button>
@@ -55,9 +58,9 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
   },
-  loginText: {textAlign: 'center'},
-  loginDesc: {textAlign: 'center'},
-  inputEmail: {marginTop: 10, marginBottom: 10},
-  inputPassword: {marginTop: 10, marginBottom: 10},
-  loginButton: {marginTop: 10, marginBottom: 10},
+  loginText: { textAlign: 'center' },
+  loginDesc: { textAlign: 'center' },
+  inputEmail: { marginTop: 10, marginBottom: 10 },
+  inputPassword: { marginTop: 10, marginBottom: 10 },
+  loginButton: { marginTop: 10, marginBottom: 10 },
 });
