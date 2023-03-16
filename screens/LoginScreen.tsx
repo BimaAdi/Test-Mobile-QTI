@@ -1,15 +1,31 @@
-import { Card, Layout, Text, Input, Button } from '@ui-kitten/components';
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import type { DrawerParamList } from '../navigators';
-import { loginApi } from '../services/LoginApi';
+import {Card, Layout, Text, Input, Button} from '@ui-kitten/components';
+import React, {useState} from 'react';
+import {StyleSheet} from 'react-native';
+import {useMutation} from '@tanstack/react-query';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import type {DrawerParamList} from '../navigators';
+import {loginApi} from '../services/LoginApi';
+import {ErrorType} from '../hooks/http';
 
 type Props = NativeStackScreenProps<DrawerParamList, 'Login'>;
 
-export const LoginScreen = ({ navigation }: Props) => {
+export const LoginScreen = ({navigation}: Props) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+
+  const login = useMutation({
+    mutationFn: loginApi,
+    onSuccess: data => {
+      console.log('success bro');
+      console.log(data.data);
+    },
+    onError: (error: ErrorType<{message?: string; error?: string}>) => {
+      console.log('error bro');
+      console.log(error.response?.status);
+      console.log(error.response?.data?.message);
+    },
+  });
+
   return (
     <Layout style={styles.center}>
       <Card style={styles.loginCard}>
@@ -36,7 +52,10 @@ export const LoginScreen = ({ navigation }: Props) => {
           style={styles.loginButton}
           onPress={() => {
             // navigation.navigate('ListUserScreen');
-            loginApi({ email: "admin@example.com", password: "12qwaszx" }).then(x => console.log(x))
+            // loginApi({email: 'admin@example.com', password: '12qwaszx'}).then(
+            //   res => console.log(res.data),
+            // );
+            login.mutate({email, password});
           }}>
           Login
         </Button>
@@ -57,9 +76,9 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
   },
-  loginText: { textAlign: 'center' },
-  loginDesc: { textAlign: 'center' },
-  inputEmail: { marginTop: 10, marginBottom: 10 },
-  inputPassword: { marginTop: 10, marginBottom: 10 },
-  loginButton: { marginTop: 10, marginBottom: 10 },
+  loginText: {textAlign: 'center'},
+  loginDesc: {textAlign: 'center'},
+  inputEmail: {marginTop: 10, marginBottom: 10},
+  inputPassword: {marginTop: 10, marginBottom: 10},
+  loginButton: {marginTop: 10, marginBottom: 10},
 });
