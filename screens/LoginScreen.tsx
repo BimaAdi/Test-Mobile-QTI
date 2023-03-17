@@ -52,10 +52,8 @@ export const LoginScreen = ({navigation}: Props) => {
           style={styles.loginButton}
           onPress={() => {
             // navigation.navigate('ListUserScreen');
-            // loginApi({email: 'admin@example.com', password: '12qwaszx'}).then(
-            //   res => console.log(res.data),
-            // );
             login.mutate({email, password});
+
           }}>
           Login
         </Button>
