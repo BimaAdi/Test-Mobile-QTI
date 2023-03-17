@@ -1,14 +1,31 @@
 import {Card, Layout, Text, Input, Button} from '@ui-kitten/components';
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
+import {useMutation} from '@tanstack/react-query';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {DrawerParamList} from '../navigators';
+import {loginApi} from '../services/LoginApi';
+import {ErrorType} from '../hooks/http';
 
 type Props = NativeStackScreenProps<DrawerParamList, 'Login'>;
 
 export const LoginScreen = ({navigation}: Props) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+
+  const login = useMutation({
+    mutationFn: loginApi,
+    onSuccess: data => {
+      console.log('success bro');
+      console.log(data.data);
+    },
+    onError: (error: ErrorType<{message?: string; error?: string}>) => {
+      console.log('error bro');
+      console.log(error.response?.status);
+      console.log(error.response?.data?.message);
+    },
+  });
+
   return (
     <Layout style={styles.center}>
       <Card style={styles.loginCard}>
@@ -34,7 +51,9 @@ export const LoginScreen = ({navigation}: Props) => {
         <Button
           style={styles.loginButton}
           onPress={() => {
-            navigation.navigate('ListUserScreen');
+            // navigation.navigate('ListUserScreen');
+            login.mutate({email, password});
+
           }}>
           Login
         </Button>
